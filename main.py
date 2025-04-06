@@ -1,44 +1,37 @@
-import time
-from copy import deepcopy
-from problem import MazeProblem  # Asegúrate que el archivo se llame problem.py
+from src.algorithms.breadth_first_search import breadth_first_search
+from src.utils.problem import MazeProblem
 
-# Mapa inicial (5x5)
-maze = [list("     "), list("  #  "), list("     "), list(" ## "), list("     ")]
+if __name__ == "__main__":
+    maze = [
+    [' ', '#', ' ', ' ', '#', ' ', ' ', '#', ' ', ' '],
+    [' ', '#', ' ', '#', '#', ' ', '#', '#', '#', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', ' '],
+    ['#', '#', '#', ' ', '#', ' ', ' ', ' ', '#', ' '],
+    [' ', ' ', ' ', ' ', '#', ' ', '#', ' ', ' ', '#'],
+    [' ', '#', '#', ' ', ' ', ' ', '#', ' ', '#', ' '],
+    [' ', ' ', ' ', '#', '#', '#', '#', ' ', ' ', ' '],
+    ['#', ' ', ' ', ' ', ' ', ' ', '#', ' ', '#', ' '],
+    [' ', '#', '#', '#', ' ', '#', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', '#', ' ', '#', ' ', ' ']
+]
+    initial_mouse = (2, 3)
+    initial_cheese = (8, 7)
 
-initial_mouse = (0, 0)
-initial_cheese = (4, 4)
+    problem = MazeProblem(maze, initial_mouse, initial_cheese)
 
-problem = MazeProblem(deepcopy(maze), initial_mouse, initial_cheese)
+    print("Estado inicial:")
+    problem.display_state(problem.initial_state)
 
-# Movimiento en orden de reloj
-actions = ["UP", "RIGHT", "DOWN", "LEFT"]
+    goal_node = breadth_first_search(problem)
 
-state = problem.initial_state
-
-
-def display_maze(maze, mouse, cheese):
-    display = deepcopy(maze)
-    mx, my = mouse
-    cx, cy = cheese
-    if (mx, my) == (cx, cy):
-        display[mx][my] = "Q"  # Queso encontrado
+    if goal_node:
+        print("\nAcciones para llegar al queso:")
+        path = goal_node.path()  # Reconstruye el camino desde el nodo inicial
+        for i, node in enumerate(path):
+            print(f"Paso {i}:")
+            problem.display_state(node.state)
+            if node.action:
+                print(f"Acción tomada: {node.action}\n")
     else:
-        display[mx][my] = "M"
-        display[cx][cy] = "C"
-    for row in display:
-        print("".join(row))
-    print()
-
-
-print("Estado inicial:")
-display_maze(problem.maze, *state)
-
-for step in range(10):
-    print(f"Paso {step + 1}:")
-    for action in actions:
-        new_state, cost = problem.result(state, action)
-        if new_state:
-            state = new_state
-            break
-    display_maze(problem.maze, *state)
-    time.sleep(0.5)
+        print("\nNo se encontró una solución.")
+            

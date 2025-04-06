@@ -33,41 +33,33 @@ class MazeProblem:
 
     def mutate_walls(self):
         """De forma aleatoria agrega, elimina o mueve paredes en el laberinto."""
-        mutation_type = random.choice(["add", "remove", "move"])
-        if mutation_type == "add":
-            # Intenta agregar una pared en una celda libre
+        mutation_type = random.choices(
+            population=['add', 'remove', 'move'],
+            weights=[1, 2, 4],  # más probabilidad para 'move'
+            k=1
+        )[0]
+
+        if mutation_type == 'add':
             x = random.randint(0, self.height - 1)
             y = random.randint(0, self.width - 1)
-            if self.maze[x][y] == " ":
-                self.maze[x][y] = "#"
+            if self.maze[x][y] == ' ':
+                self.maze[x][y] = '#'
 
-        elif mutation_type == "remove":
-            # Intenta eliminar una pared existente
+        elif mutation_type == 'remove':
             x = random.randint(0, self.height - 1)
             y = random.randint(0, self.width - 1)
-            if self.maze[x][y] == "#":
-                self.maze[x][y] = " "
+            if self.maze[x][y] == '#':
+                self.maze[x][y] = ' '
 
-        elif mutation_type == "move":
-            # Intenta mover una pared de una posición a otra
-            wall_positions = [
-                (i, j)
-                for i in range(self.height)
-                for j in range(self.width)
-                if self.maze[i][j] == "#"
-            ]
+        elif mutation_type == 'move':
+            wall_positions = [(i, j) for i in range(self.height) for j in range(self.width) if self.maze[i][j] == '#']
             if wall_positions:
                 wx, wy = random.choice(wall_positions)
-                free_positions = [
-                    (i, j)
-                    for i in range(self.height)
-                    for j in range(self.width)
-                    if self.maze[i][j] == " "
-                ]
+                free_positions = [(i, j) for i in range(self.height) for j in range(self.width) if self.maze[i][j] == ' ']
                 if free_positions:
                     fx, fy = random.choice(free_positions)
-                    self.maze[wx][wy] = " "
-                    self.maze[fx][fy] = "#"
+                    self.maze[wx][wy] = ' '
+                    self.maze[fx][fy] = '#'
 
     def result(self, state, action):
         """
@@ -95,3 +87,22 @@ class MazeProblem:
         """Heurística: distancia Manhattan entre el ratón y el queso."""
         (mouse, cheese) = state
         return abs(mouse[0] - cheese[0]) + abs(mouse[1] - cheese[1])
+    
+    def display_state(self, state):
+        """Imprime el laberinto con la posición del ratón y el queso."""
+        mouse, cheese = state
+        for i in range(self.height):
+            row = ""
+            for j in range(self.width):
+                if (i, j) == mouse:
+                    row += "🐭"
+                elif (i, j) == cheese:
+                    row += "🧀"
+                elif self.maze[i][j] == '#':
+                    row += "⬛"
+                else:
+                    row += "  "
+            print(row)
+        print()
+    
+    
