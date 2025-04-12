@@ -25,8 +25,13 @@ def breadth_first_search(problem):
             next_state, cost = result
             if next_state is None:
                 continue
-
+            
             child_node = Node(state=next_state, parent=node, action=action, cost=node.cost + cost)
+
+            # Añadir el nodo hijo a la lista de hijos del nodo padre
+            expand = []
+
+            node.children = child_node.expand(problem)
 
             if problem.is_goal(next_state):
                 return child_node
