@@ -1,37 +1,33 @@
+from src.algorithms.depth_first_search import depth_first_search
 from src.algorithms.breadth_first_search import breadth_first_search
-from src.utils.problem import MazeProblem
+from src.algorithms.a_star_algorithm import a_star_search
+from src.utils.node import Node
+import numpy as np
+from src.views.show_tree import plot_tree
 
 if __name__ == "__main__":
-    maze = [
-    [' ', '#', ' ', ' ', '#', ' ', ' ', '#', ' ', ' '],
-    [' ', '#', ' ', '#', '#', ' ', '#', '#', '#', ' '],
-    [' ', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', ' '],
-    ['#', '#', '#', ' ', '#', ' ', ' ', ' ', '#', ' '],
-    [' ', ' ', ' ', ' ', '#', ' ', '#', ' ', ' ', '#'],
-    [' ', '#', '#', ' ', ' ', ' ', '#', ' ', '#', ' '],
-    [' ', ' ', ' ', '#', '#', '#', '#', ' ', ' ', ' '],
-    ['#', ' ', ' ', ' ', ' ', ' ', '#', ' ', '#', ' '],
-    [' ', '#', '#', '#', ' ', '#', ' ', ' ', ' ', ' '],
-    [' ', ' ', ' ', ' ', ' ', '#', ' ', '#', ' ', ' ']
-]
-    initial_mouse = (2, 3)
-    initial_cheese = (8, 7)
+    # maze = np.array(
+    #     [
+    #         [" ", "#", " ", " ", "#", " "],
+    #         [" ", "#", " ", "#", " ", " "],
+    #         [" ", " ", " ", "#", " ", "#"],
+    #         ["#", " ", "#", " ", " ", " "],
+    #         [" ", " ", " ", " ", "#", " "],
+    #         ["#", "#", "#", " ", "#", " "],
+    #     ]
+    # )
+    maze = np.array([[" ", " ", " ", "#"], ["#", " ", "#", " "], [" ", " ", " ", " "]])
 
-    problem = MazeProblem(maze, initial_mouse, initial_cheese)
+    start_node = Node(maze, (0, 0), (2, 3))
+    start_node.heuristic = start_node.calculate_heuristic()
 
-    print("Estado inicial:")
-    problem.display_state(problem.initial_state)
-
-    goal_node = breadth_first_search(problem)
-
-    if goal_node:
-        print("\nAcciones para llegar al queso:")
-        path = goal_node.path()  # Reconstruye el camino desde el nodo inicial
-        for i, node in enumerate(path):
-            print(f"Paso {i}:")
-            problem.display_state(node.state)
-            if node.action:
-                print(f"Acción tomada: {node.action}\n")
-    else:
-        print("\nNo se encontró una solución.")
-            
+    # all_nodes = depth_first_search(start_node)
+    # all_nodes = breadth_first_search(start_node)
+    all_nodes = a_star_search(start_node)
+    plot_tree(all_nodes)
+    for node in all_nodes:
+        children = node.get_successors()
+        # print(
+        #     f"Node: {node.mouse_pos}, Children: {[child.mouse_pos for child in children]}"
+        # )
+        print(f"Node: {node.mouse_pos}")

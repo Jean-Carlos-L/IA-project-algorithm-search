@@ -1,44 +1,31 @@
 from collections import deque
+from typing import List
 from src.utils.node import Node
 
-def breadth_first_search(problem):
-    start_state = problem.initial_state
-    start_node = Node(state=start_state, parent=None, action=None, cost=0)
 
-    if problem.is_goal(start_state):
-        return [start_node.state]
+def breadth_first_search(start_node: Node) -> List[Node]:
+    queue = deque([start_node])  # Cola para BFS
+    generated_nodes = [start_node]  # Todos los nodos generados (para graficar)
+    visited_nodes = []  # Opcional: los nodos que se expandieron
 
-    frontier = deque([start_node])
-    explored = set()
+    while queue:
+        current_node = queue.popleft()
+        visited_nodes.append(current_node)
 
-    while frontier:
-        node = frontier.popleft()
+        # Verificamos si es el objetivo
+        if current_node.is_goal():
+            print("Goal found!")
+            return generated_nodes  # Retornamos todos los nodos generados para graficar
 
-        if node.state in explored:
-            continue
-        explored.add(node.state)
+        # Expandimos el nodo actual
+        children = current_node.get_successors()
 
-        for action in ['UP', 'RIGHT', 'DOWN', 'LEFT']:
-            result = problem.result(node.state, action)
-            if result is None:
-                continue
-            next_state, cost = result
-            if next_state is None:
-                continue
+        # Guardamos los hijos sin filtrar repeticiones
+        generated_nodes.extend(children)
 
-            child_node = Node(state=next_state, parent=node, action=action, cost=node.cost + cost)
+        # En amplitud agregamos al final de la cola
+        queue.extend(children)
 
-            if problem.is_goal(next_state):
-                return child_node
+    print("Goal not found.")
+    return generated_nodes
 
-            frontier.append(child_node)
-
-    return None  # Si no se encuentra solución
-
-def extract_solution(node):
-    path = []
-    while node is not None:
-        path.append((node.state, node.action))
-        node = node.parent
-    path.reverse()
-    return path
