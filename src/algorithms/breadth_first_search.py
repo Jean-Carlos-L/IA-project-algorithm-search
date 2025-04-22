@@ -1,29 +1,36 @@
 from collections import deque
 from typing import List
 from src.utils.node import Node
-
+from src.utils.maze_dynamics import MazeDynamics  # importar la función dinámica
 
 def breadth_first_search(start_node: Node) -> List[Node]:
-    queue = deque([start_node])  # Cola para BFS
-    generated_nodes = [start_node]  # Todos los nodos generados (para graficar)
-    visited_nodes = []  # Opcional: los nodos que se expandieron
+    queue = deque([start_node])
+    generated_nodes = [start_node]
+    visited_nodes = set()
 
     while queue:
         current_node = queue.popleft()
-        visited_nodes.append(current_node)
 
-        # Verificamos si es el objetivo
+        if current_node in visited_nodes:
+            continue
+        visited_nodes.add(current_node)
+
         if current_node.is_goal():
             print("Goal found!")
-            return generated_nodes  # Retornamos todos los nodos generados para graficar
+            return generated_nodes
 
-        # Expandimos el nodo actual
-        children = current_node.get_successors()
+        # Si queremos mutar el laberinto
+        if current_node.depth % 3 == 0:  # Cada 3 pasos
+            # Asegúrate de que mouse_pos y cheese_pos estén presentes en current_node
+            maze_dynamics = MazeDynamics(current_node.maze, current_node.mouse_pos, current_node.cheese_pos)
+            new_maze = maze_dynamics.mutate()  # Llamamos al método mutate
+            print(f"\nMaze at depth {current_node.depth} after mutation:")
+            print(new_maze)
+        else:
+            new_maze = current_node.maze
 
-        # Guardamos los hijos sin filtrar repeticiones
+        children = current_node.get_successors(maze_override=new_maze)
         generated_nodes.extend(children)
-
-        # En amplitud agregamos al final de la cola
         queue.extend(children)
 
     print("Goal not found.")
