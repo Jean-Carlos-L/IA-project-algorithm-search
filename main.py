@@ -20,17 +20,15 @@ if __name__ == "__main__":
     maze = np.array([[" ", " ", " ", "#"], ["#", " ", "#", " "], [" ", " ", " ", " "]])
 
 
-    maze_dynamics = MazeDynamics(maze, (0,0), (2,3))
-# eso es lo que le digo que pasa cuando le dejaba un paso y esa vaina se ponía loco 
     start_node = Node(maze, (0, 0), (2, 3))
     start_node.heuristic = start_node.calculate_heuristic()
 
-    #all_nodes = depth_first_search(start_node)
-    #all_nodes = breadth_first_search(start_node)
-    all_nodes = a_star_search(start_node)
+    #ll_nodes = depth_first_search(start_node)
+    all_nodes = breadth_first_search(start_node)
+    #all_nodes = a_star_search(start_node)
     plot_tree(all_nodes)
     for node in all_nodes:
-        children = node.get_successors(maze_dynamics=maze_dynamics)
+        children = node.get_successors()
         # print(
         #     f"Node: {node.mouse_pos}, Children: {[child.mouse_pos for child in children]}"
         # )

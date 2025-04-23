@@ -1,7 +1,7 @@
 from collections import deque
 from typing import List
 from src.utils.node import Node
-from src.utils.maze_dynamics import MazeDynamics  # importar la función dinámica
+#from src.utils.maze_dynamics import MazeDynamics  # importar la función dinámica
 
 def breadth_first_search(start_node: Node) -> List[Node]:
     queue = deque([start_node])
@@ -22,14 +22,11 @@ def breadth_first_search(start_node: Node) -> List[Node]:
         # Si queremos mutar el laberinto
         if current_node.depth % 3 == 0:  # Cada 3 pasos
             # Asegúrate de que mouse_pos y cheese_pos estén presentes en current_node
-            maze_dynamics = MazeDynamics(current_node.maze, current_node.mouse_pos, current_node.cheese_pos)
-            new_maze = maze_dynamics.mutate()  # Llamamos al método mutate
+            current_node.mutate()  # Llamamos al método mutate
             #print(f"\nMaze at depth {current_node.depth} after mutation:")
             #print(new_maze)
-        else:
-            new_maze = current_node.maze
 
-        children = current_node.get_successors(maze_override=new_maze)
+        children = current_node.get_successors()
         generated_nodes.extend(children)
         queue.extend(children)
 
