@@ -10,7 +10,6 @@ class MazeDynamics:
 
 
     def mutate(self) -> np.ndarray:
-        """Devuelve una copia del laberinto con una mutación aplicada."""
         mutated_maze = self.maze.copy()
 
         mutation_type = random.choices(

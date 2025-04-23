@@ -26,8 +26,8 @@ if __name__ == "__main__":
     start_node.heuristic = start_node.calculate_heuristic()
 
     #all_nodes = depth_first_search(start_node)
-    all_nodes = breadth_first_search(start_node)
-    #all_nodes = a_star_search(start_node)
+    #all_nodes = breadth_first_search(start_node)
+    all_nodes = a_star_search(start_node)
     plot_tree(all_nodes)
     for node in all_nodes:
         children = node.get_successors(maze_dynamics=maze_dynamics)

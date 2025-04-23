@@ -1,6 +1,7 @@
 from queue import PriorityQueue
 from typing import List
 from src.utils.node import Node  # Asegurate de tener la clase Node bien implementada
+from src.utils.maze_dynamics import MazeDynamics
 
 
 def a_star_search(start_node: Node) -> List[Node]:
@@ -21,8 +22,15 @@ def a_star_search(start_node: Node) -> List[Node]:
         if current_node.is_goal():
             print("Goal found!")
             return generated_nodes
+        
+        # Si queremos mutar el laberinto
+        if current_node.depth % 3 == 0:  # Cada 3 pasos
+            maze_dynamics = MazeDynamics(current_node.maze, current_node.mouse_pos, current_node.cheese_pos)
+            new_maze = maze_dynamics.mutate()  # Llamamos al método mutate
+        else:
+            new_maze = current_node.maze
 
-        children = current_node.get_successors()
+        children = current_node.get_successors(maze_override=new_maze)
         generated_nodes.extend(children)
 
         for child in children:

@@ -44,9 +44,6 @@ class Node:
             active_maze = maze_override
         elif maze_dynamics is not None and self.depth % 2 == 0:
             active_maze = maze_dynamics.mutate()
-            print(f"\n🌀 Maze at depth {self.depth}:")
-            for row in active_maze:
-                print(''.join(row))
         else:
             active_maze = self.maze
 

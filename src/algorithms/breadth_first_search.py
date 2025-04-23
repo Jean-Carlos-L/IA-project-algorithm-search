@@ -24,8 +24,8 @@ def breadth_first_search(start_node: Node) -> List[Node]:
             # Asegúrate de que mouse_pos y cheese_pos estén presentes en current_node
             maze_dynamics = MazeDynamics(current_node.maze, current_node.mouse_pos, current_node.cheese_pos)
             new_maze = maze_dynamics.mutate()  # Llamamos al método mutate
-            print(f"\nMaze at depth {current_node.depth} after mutation:")
-            print(new_maze)
+            #print(f"\nMaze at depth {current_node.depth} after mutation:")
+            #print(new_maze)
         else:
             new_maze = current_node.maze
 
