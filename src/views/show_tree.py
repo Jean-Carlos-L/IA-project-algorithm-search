@@ -18,7 +18,6 @@ def plot_tree(nodes, path=None):
             parent_id = id(node.parent)
             G.add_edge(parent_id, node_id)
 
-    # Tamaño dinámico de figura
     fig_width = max(10, len(nodes) * 0.6)
     fig_height = max(5, len(nodes) * 0.15)
     plt.figure(figsize=(fig_width, fig_height))
@@ -26,12 +25,10 @@ def plot_tree(nodes, path=None):
     pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
     labels = nx.get_node_attributes(G, "label")
 
-    # Colores: azul para nodos normales, verde para el camino
     node_colors = [
         "lightgreen" if node_id in path_ids else "skyblue" for node_id in G.nodes()
     ]
 
-    # Aristas del camino a la meta (como pares de ids)
     path_edges = set()
     if path and len(path) > 1:
         path_edges = {(id(path[i]), id(path[i + 1])) for i in range(len(path) - 1)}

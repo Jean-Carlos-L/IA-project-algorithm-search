@@ -42,14 +42,6 @@ class Node:
 
     def get_successors(self) -> list["Node"]:
         successors = []
-        #
-        # Determinar el laberinto actual
-        # if maze_override is not None:
-        #     active_maze = maze_override
-        # elif maze_dynamics is not None and self.depth % 2 == 0:
-        #     active_maze = maze_dynamics.mutate()
-        # else:
-        #     active_maze = self.maze
 
         rows, cols = self.maze.shape
 
@@ -86,12 +78,6 @@ class Node:
             and np.array_equal(self.maze, other.maze)
         )
 
-    def __lt__(self, other):
-        return (self.cost + self.heuristic) < (other.cost + other.heuristic)
-
-    def __hash__(self):
-        return hash((self.mouse_pos, self.cheese_pos, self.maze.tobytes()))
-
     def copy(self):
         return Node(
             self.maze.copy(),
@@ -105,11 +91,6 @@ class Node:
             self.action,
             self.original_maze,
         )
-
-    # def __str__(self):
-    #     return f"Mouse: {self.mouse_pos}, Cheese: {self.cheese_pos}, Cost: {self.cost}, Heuristic: {self.heuristic}, Action: {self.action}, Depth: {self.depth}"
-    def __str__(self):
-        return f"{self.mouse_pos}"
 
     def mutate(self):
 
@@ -157,3 +138,11 @@ class Node:
 
         self.maze = mutated_maze
 
+    def __lt__(self, other):
+        return (self.cost + self.heuristic) < (other.cost + other.heuristic)
+
+    def __hash__(self):
+        return hash((self.mouse_pos, self.cheese_pos, self.maze.tobytes()))
+
+    def __str__(self):
+        return f"{self.mouse_pos}"

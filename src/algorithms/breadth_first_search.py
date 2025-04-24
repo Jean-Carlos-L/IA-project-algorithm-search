@@ -37,4 +37,4 @@ def breadth_first_search(start_node: Node) -> Tuple[List[Node], List[Node]]:
         queue.extend(children)
 
     print("Goal not found.")
-    return generated_nodes, []  # No se encontró camino
+    return generated_nodes, []

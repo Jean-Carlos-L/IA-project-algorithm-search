@@ -23,7 +23,6 @@ def choose_file_and_load():
             messagebox.showerror("Error", f"No se pudo cargar el archivo:\n{e}")
             return
 
-        # Cerrar la ventana y devolver los datos
         root.result = (mouse_pos, cheese_pos, maze, selected_algorithm)
         root.destroy()
 
@@ -32,7 +31,6 @@ def choose_file_and_load():
         if file_path:
             file_var.set(file_path)
 
-    # Crear ventana principal
     root = tk.Tk()
     root.title("Configuración Inicial")
 
@@ -41,7 +39,6 @@ def choose_file_and_load():
     tk.Entry(root, textvariable=file_var, width=50).pack(padx=10)
     tk.Button(root, text="Examinar", command=browse_file).pack(pady=5)
 
-    # Selección del algoritmo
     tk.Label(root, text="Selecciona el algoritmo de búsqueda:").pack(pady=5)
     algorithm_var = tk.StringVar(value="DFS")
     algorithm_menu = ttk.Combobox(
