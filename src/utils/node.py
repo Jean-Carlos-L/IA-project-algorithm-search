@@ -53,7 +53,7 @@ class Node:
             if (
                 0 <= new_x < rows
                 and 0 <= new_y < cols
-                and self.maze[new_x, new_y] != "#"
+                and self.maze[new_x, new_y] != "1"
             ):
                 new_mouse_pos = (new_x, new_y)
                 new_node = Node(
@@ -93,7 +93,6 @@ class Node:
         )
 
     def mutate(self):
-
         self.original_maze = self.maze.copy()
         mutated_maze = self.maze.copy()
 
@@ -108,11 +107,11 @@ class Node:
                 and (x, y) != self.mouse_pos
                 and (x, y) != self.cheese_pos
             ):
-                mutated_maze[x, y] = "#"
+                mutated_maze[x, y] = "1"
 
         elif mutation_type == "remove":
             x, y = random.randint(0, self.height - 1), random.randint(0, self.width - 1)
-            if mutated_maze[x, y] == "#":
+            if mutated_maze[x, y] == "1":
                 mutated_maze[x, y] = " "
 
         elif mutation_type == "move":
@@ -120,7 +119,7 @@ class Node:
                 (i, j)
                 for i in range(self.height)
                 for j in range(self.width)
-                if mutated_maze[i, j] == "#"
+                if mutated_maze[i, j] == "1"
             ]
             spaces = [
                 (i, j)
@@ -134,9 +133,27 @@ class Node:
                 wx, wy = random.choice(walls)
                 fx, fy = random.choice(spaces)
                 mutated_maze[wx, wy] = " "
-                mutated_maze[fx, fy] = "#"
+                mutated_maze[fx, fy] = "1"
 
         self.maze = mutated_maze
+
+    def in_bounds(self, pos):
+        x, y = pos
+        return 0 <= x < self.height and 0 <= y < self.width
+
+    def is_free(self, pos):
+        x, y = pos
+        return self.maze[x][y] != "1"
+
+    def move_cheese(self, cheese):
+        x, y = cheese
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        random.shuffle(directions)
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if self.in_bounds((nx, ny)) and self.is_free((nx, ny)):
+                return (nx, ny)
+        return cheese
 
     def __lt__(self, other):
         return (self.cost + self.heuristic) < (other.cost + other.heuristic)

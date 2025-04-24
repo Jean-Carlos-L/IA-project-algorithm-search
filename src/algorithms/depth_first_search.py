@@ -1,6 +1,5 @@
 from typing import List
 from src.utils.node import Node
-from src.utils.maze_dynamics import MazeDynamics
 
 
 def depth_first_search(start_node: Node) -> List[Node]:
@@ -33,6 +32,7 @@ def depth_first_search(start_node: Node) -> List[Node]:
 
         if current_node.depth % 3 == 0:
             current_node.mutate()
+            current_node.cheese_pos = current_node.move_cheese(current_node.cheese_pos)
 
         children = current_node.get_successors()
         generated_nodes.extend(children)

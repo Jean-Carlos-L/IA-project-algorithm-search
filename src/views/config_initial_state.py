@@ -17,7 +17,8 @@ def choose_file_and_load():
                 lines = file.readlines()
                 mouse_pos = tuple(map(int, lines[0].split()))
                 cheese_pos = tuple(map(int, lines[1].split()))
-                maze_data = [list(line.strip()) for line in lines[2:]]
+                maze_data = [line.strip().split() for line in lines[2:]]
+                print(maze_data)
                 maze = np.array(maze_data)
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo cargar el archivo:\n{e}")

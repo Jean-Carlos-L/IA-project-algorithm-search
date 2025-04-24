@@ -31,6 +31,7 @@ def breadth_first_search(start_node: Node) -> Tuple[List[Node], List[Node]]:
 
         if current_node.depth % 3 == 0:
             current_node.mutate()
+            current_node.cheese_pos = current_node.move_cheese(current_node.cheese_pos)
 
         children = current_node.get_successors()
         generated_nodes.extend(children)
