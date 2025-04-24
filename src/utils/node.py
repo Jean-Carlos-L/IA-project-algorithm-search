@@ -103,7 +103,7 @@ class Node:
         if mutation_type == "add":
             x, y = random.randint(0, self.height - 1), random.randint(0, self.width - 1)
             if (
-                mutated_maze[x, y] == " "
+                mutated_maze[x, y] == "0"
                 and (x, y) != self.mouse_pos
                 and (x, y) != self.cheese_pos
             ):
@@ -112,7 +112,7 @@ class Node:
         elif mutation_type == "remove":
             x, y = random.randint(0, self.height - 1), random.randint(0, self.width - 1)
             if mutated_maze[x, y] == "1":
-                mutated_maze[x, y] = " "
+                mutated_maze[x, y] = "0"
 
         elif mutation_type == "move":
             walls = [
@@ -125,14 +125,14 @@ class Node:
                 (i, j)
                 for i in range(self.height)
                 for j in range(self.width)
-                if mutated_maze[i, j] == " "
+                if mutated_maze[i, j] == "0"
                 and (i, j) != self.mouse_pos
                 and (i, j) != self.cheese_pos
             ]
             if walls and spaces:
                 wx, wy = random.choice(walls)
                 fx, fy = random.choice(spaces)
-                mutated_maze[wx, wy] = " "
+                mutated_maze[wx, wy] = "0"
                 mutated_maze[fx, fy] = "1"
 
         self.maze = mutated_maze
