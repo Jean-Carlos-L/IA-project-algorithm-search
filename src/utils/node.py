@@ -53,7 +53,7 @@ class Node:
             if (
                 0 <= new_x < rows
                 and 0 <= new_y < cols
-                and self.maze[new_x, new_y] != "#"
+                and self.maze[new_x, new_y] != "1"
             ):
                 new_mouse_pos = (new_x, new_y)
                 new_node = Node(
@@ -108,11 +108,11 @@ class Node:
                 and (x, y) != self.mouse_pos
                 and (x, y) != self.cheese_pos
             ):
-                mutated_maze[x, y] = "#"
+                mutated_maze[x, y] = "1"
 
         elif mutation_type == "remove":
             x, y = random.randint(0, self.height - 1), random.randint(0, self.width - 1)
-            if mutated_maze[x, y] == "#":
+            if mutated_maze[x, y] == "1":
                 mutated_maze[x, y] = " "
 
         elif mutation_type == "move":
@@ -120,7 +120,7 @@ class Node:
                 (i, j)
                 for i in range(self.height)
                 for j in range(self.width)
-                if mutated_maze[i, j] == "#"
+                if mutated_maze[i, j] == "1"
             ]
             spaces = [
                 (i, j)
@@ -134,7 +134,7 @@ class Node:
                 wx, wy = random.choice(walls)
                 fx, fy = random.choice(spaces)
                 mutated_maze[wx, wy] = " "
-                mutated_maze[fx, fy] = "#"
+                mutated_maze[fx, fy] = "1"
 
         self.maze = mutated_maze
 

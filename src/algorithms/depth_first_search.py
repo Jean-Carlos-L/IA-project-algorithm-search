@@ -1,6 +1,5 @@
 from typing import List
 from src.utils.node import Node
-from src.utils.maze_dynamics import MazeDynamics
 
 
 def depth_first_search(start_node: Node) -> List[Node]:
