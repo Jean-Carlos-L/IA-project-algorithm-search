@@ -17,19 +17,33 @@ def depth_first_search(start_node: Node) -> List[Node]:
 
         if current_node.is_goal():
             print("Goal found!")
-            return generated_nodes
-        
-        if current_node.depth % 3 == 0:  # Cada 3 pasos
-            maze_dynamics = MazeDynamics(current_node.maze, current_node.mouse_pos, current_node.cheese_pos)
-            new_maze = maze_dynamics.mutate()  # Llamamos al método mutate
 
-        else:
-            new_maze = current_node.maze
+            # Aquí se arma el camino desde la meta hasta el inicio
+            path = []
+            while current_node:
+                path.append(current_node)
+                current_node = current_node.parent
+            path.reverse()  # El camino debe ir desde el inicio hasta la meta
 
-        children = current_node.get_successors(maze_override=new_maze)
+            # Agregar el camino al conjunto de nodos generados para la visualización
+            generated_nodes.extend(path)
+
+            return (
+                generated_nodes,
+                path,
+            )  # Devuelve los nodos generados y el camino hacia la meta
+
+        if current_node.depth % 3 == 0:
+            current_node.mutate()
+
+        children = current_node.get_successors()
         generated_nodes.extend(children)
 
+        # Añadir los hijos a la pila (en orden inverso para DFS)
         stack.extend(reversed(children))
 
     print("Goal not found.")
-    return generated_nodes
+    return (
+        generated_nodes,
+        [],
+    )  # Si no se encuentra la meta, retorna el conjunto de nodos generados y una lista vacía

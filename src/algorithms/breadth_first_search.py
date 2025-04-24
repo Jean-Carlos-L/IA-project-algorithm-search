@@ -1,9 +1,18 @@
 from collections import deque
-from typing import List
+from typing import List, Tuple
 from src.utils.node import Node
-#from src.utils.maze_dynamics import MazeDynamics  # importar la función dinámica
 
-def breadth_first_search(start_node: Node) -> List[Node]:
+
+def reconstruct_path(goal_node: Node) -> List[Node]:
+    path = []
+    current = goal_node
+    while current:
+        path.append(current)
+        current = current.parent
+    return list(reversed(path))
+
+
+def breadth_first_search(start_node: Node) -> Tuple[List[Node], List[Node]]:
     queue = deque([start_node])
     generated_nodes = [start_node]
     visited_nodes = set()
@@ -17,19 +26,15 @@ def breadth_first_search(start_node: Node) -> List[Node]:
 
         if current_node.is_goal():
             print("Goal found!")
-            return generated_nodes
+            path_to_goal = reconstruct_path(current_node)
+            return generated_nodes, path_to_goal
 
-        # Si queremos mutar el laberinto
-        if current_node.depth % 3 == 0:  # Cada 3 pasos
-            # Asegúrate de que mouse_pos y cheese_pos estén presentes en current_node
-            current_node.mutate()  # Llamamos al método mutate
-            #print(f"\nMaze at depth {current_node.depth} after mutation:")
-            #print(new_maze)
+        if current_node.depth % 3 == 0:
+            current_node.mutate()
 
         children = current_node.get_successors()
         generated_nodes.extend(children)
         queue.extend(children)
 
     print("Goal not found.")
-    return generated_nodes
-
+    return generated_nodes, []  # No se encontró camino
