@@ -93,7 +93,6 @@ class Node:
         )
 
     def mutate(self):
-
         self.original_maze = self.maze.copy()
         mutated_maze = self.maze.copy()
 
@@ -137,6 +136,24 @@ class Node:
                 mutated_maze[fx, fy] = "1"
 
         self.maze = mutated_maze
+
+    def in_bounds(self, pos):
+        x, y = pos
+        return 0 <= x < self.height and 0 <= y < self.width
+
+    def is_free(self, pos):
+        x, y = pos
+        return self.maze[x][y] != "1"
+
+    def move_cheese(self, cheese):
+        x, y = cheese
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        random.shuffle(directions)
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if self.in_bounds((nx, ny)) and self.is_free((nx, ny)):
+                return (nx, ny)
+        return cheese
 
     def __lt__(self, other):
         return (self.cost + self.heuristic) < (other.cost + other.heuristic)
